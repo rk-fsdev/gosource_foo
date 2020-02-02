@@ -1,4 +1,4 @@
-import { select, take, put, all } from 'redux-saga';
+import { select, take, put, all } from 'redux-saga/effects';
 import moment from 'moment';
 import {
   getSendableFooIds,
@@ -8,14 +8,14 @@ import {
   UPDATE_FOO,
   TOGGLE_COMPLETE_FOO,
   SUBMIT_FOO,
-} from '../reducers/foo';
+} from '../reducers/foo/foo';
 
 export const SUBMISSION_COMPLETE = 'submission/COMPLETE';
 
 export function* handleCompletedFoos() {
   while (true) {
-    const { id } = take(TOGGLE_COMPLETE_FOO);
-    const foo = select(getFooById, id);
+    const { id } = yield take(TOGGLE_COMPLETE_FOO);
+    const foo = yield select(getFooById, id);
 
     if (foo.completedAt) {
       if (moment(foo.completedAt).diff(moment(foo.createdAt), 'seconds') > 20) {
