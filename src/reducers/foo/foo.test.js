@@ -6,8 +6,8 @@ describe('toggleCompleteFoo', () => {
     expect(result).toEqual({
       type: TOGGLE_COMPLETE_FOO,
       payload: {
-        id: 'some-id'
+        id: 'some-id',
       },
     });
-  })
-})
+  });
+});

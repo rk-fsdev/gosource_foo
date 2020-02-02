@@ -10,14 +10,13 @@ import {
   SUBMIT_FOO,
 } from '../reducers/foo';
 
-
 export const SUBMISSION_COMPLETE = 'submission/COMPLETE';
 
 export function* handleCompletedFoos() {
   while (true) {
     const { id } = take(TOGGLE_COMPLETE_FOO);
     const foo = select(getFooById, id);
-    
+
     if (foo.completedAt) {
       if (moment(foo.completedAt).diff(moment(foo.createdAt), 'seconds') > 20) {
         yield put(updateFooSendable(id, true));
@@ -53,9 +52,5 @@ export function* submitFoo() {
 }
 
 export function* registerSagas() {
-  yield all([
-    submitFoo(),
-    submitSendableFoos(),
-    handleCompletedFoos(),
-  ]);
+  yield all([submitFoo(), submitSendableFoos(), handleCompletedFoos()]);
 }
