@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { SUBMISSION_COMPLETE } from '../../sagas/foo';
 
 export const SET_FOO_SENDABLE = 'foo/SET_SENDABLE';
 export const UPDATE_FOO = 'foo/UPDATE';
@@ -99,6 +100,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         byId: {
+          ...state.byId,
           [id]: {
             ...foo,
             completedAt: foo.completedAt ? null : completedAt,
@@ -112,8 +114,9 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         byId: {
-          ...state,
+          ...state.byId,
           [id]: {
+            ...state.byId[id],
             sendable,
           },
         },
@@ -121,9 +124,11 @@ export default function reducer(state = initialState, action) {
     }
 
     case UPDATE_FOO: {
-      const { id, payload } = action;
+      const { payload } = action;
+      const { id } = payload;
 
       return {
+        ...state,
         byId: {
           ...state.byId,
           [id]: {
@@ -140,4 +145,5 @@ export default function reducer(state = initialState, action) {
 // Selectors
 export const getAllFoos = state => state.foo.allIds.map(id => state.foo.byId[id]);
 export const getFooById = (state, id) => state.foo.byId[id];
-export const getSendableFooIds = state => state.foo.allIds.filter(id => state.byId[id].sendable);
+export const getSendableFooIds = state =>
+  state.foo.allIds.filter(id => state.foo.byId[id].sendable);
